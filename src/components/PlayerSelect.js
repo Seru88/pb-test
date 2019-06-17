@@ -18,9 +18,9 @@ export default ({players}) => {
   }, [selectedPlayers])
   return (
     <ThemeProvider theme={theme}>
-      <Box display="flex" flexWrap="wrap" justifyContent="center" >
+      <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center" >
         {players.map(player => (
-          <PlayerCard player={player} onClick={selectPlayer}/>
+          <PlayerCard key={player.owner} player={player} onClick={selectPlayer}/>
         ))}
       </Box>
     </ThemeProvider>
