@@ -1,6 +1,6 @@
-import { Box, Button, Grid } from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 
+import { Box } from '@material-ui/core';
 import PlayerCard from './PlayerCard';
 import React from 'react';
 import { useTheme } from '@material-ui/styles';

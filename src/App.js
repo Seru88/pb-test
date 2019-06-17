@@ -4,7 +4,6 @@ import { CssBaseline } from '@material-ui/core';
 import Layout from './Layout';
 import React from 'react';
 import { ThemeProvider } from '@material-ui/styles';
-import blueGrey from '@material-ui/core/colors/blueGrey';
 
 let theme = createMuiTheme({
   palette: {
@@ -12,11 +11,11 @@ let theme = createMuiTheme({
       main: '#ff7d08'
     },
     secondary: {
-      main: '#47515d',
+      main: '#4c5b6a',
     },
     background: {
-      default: '#23292f',
-      paper: blueGrey['900']
+      default: '#242e37',
+      paper: '#4c5b6a'
     },
     text: {
       primary: '#fff'
@@ -25,6 +24,7 @@ let theme = createMuiTheme({
   typography: {
     // Tell Material-UI what's the font-size on the html element is.
     htmlFontSize: 10,
+    fontFamily: '"Catamaran", "Roboto", "Helvetica", "Arial", sans-serif'
   },
 });
 
