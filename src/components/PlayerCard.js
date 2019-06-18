@@ -1,33 +1,36 @@
-import { Avatar, Box } from '@material-ui/core';
+import { Avatar, Box, Fade } from '@material-ui/core';
 import { darken, fade } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
-import Flag from 'react-world-flags';
 import React from 'react';
+import Truncate from 'react-truncate';
 import { useTheme } from '@material-ui/styles';
 
+// only define custom behaviour
 const Card = styled(Box)`
-  
   transition: ${({ theme }) =>
     theme.transitions.create(['background-color', 'box-shadow', 'border'])};
+  background-color: ${({ theme, selected }) =>
+    selected
+      ? darken(theme.palette.background.paper, 0.2)
+      : theme.palette.background.paper};
   border: ${({ theme, selected }) =>
     selected
       ? `4px solid ${theme.palette.primary.main}`
       : `4px solid ${theme.palette.background.paper}`} 
   &:hover {
     background-color: ${({ theme }) =>
-      darken(theme.palette.background.paper, 0.1)};
-    border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.2)};
-    
+      darken(theme.palette.background.paper, 0.2)};
+    border-color: ${({ theme, selected }) =>
+      selected
+        ? darken(theme.palette.primary.main, 0.2)
+        : darken(theme.palette.background.paper, 0.2)}; 
   }
-
-
   &:active {
     background-color: ${({ theme }) =>
       darken(theme.palette.background.paper, 0.2)};
-  border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.3)};
-    
+    border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.3)};
   }
 `;
 
@@ -40,7 +43,6 @@ export default ({ player }) => {
   return (
     <ThemeProvider theme={theme}>
       <Card
-        // component="button"
         className="player-card"
         selected={selected}
         width={320}
@@ -49,22 +51,32 @@ export default ({ player }) => {
         p={2}
         boxShadow={3}
         borderRadius={25}
-        bgcolor="background.paper"
         position="relative"
         onClick={onSelect}
       >
+        <Fade in={selected}>
+          <Box
+            className="checkmark-wrapper"
+            width={40}
+            height={40}
+            borderRadius={25}
+            bgcolor="#fff"
+            position="absolute"
+            top={-20}
+            left={-20}
+            zIndex={10}
+          >
+            <CheckCircle color="primary" style={{ width: 40, height: 40 }} />
+          </Box>
+        </Fade>
         <Box
-          className="selection-checkmark"
-          display={selected ? 'block' : 'none'}
-          width={40}
-          height={40}
-          borderRadius={25}
-          bgcolor="#fff"
+          className="flag-wrapper"
           position="absolute"
-          top={-10}
-          left={-10}
+          top={80}
+          left={80}
+          zIndex={10}
         >
-          <CheckCircle color="primary" style={{ width: 40, height: 40 }} />
+          <Box className={`famfamfam-flags ${player.country}`} />
         </Box>
         <Box
           display="flex"
@@ -72,12 +84,14 @@ export default ({ player }) => {
           alignItems="center"
           marginBottom={1.5}
         >
-          <Avatar
-            selected={selected}
-            src={player.avatarUrl}
-            // can't seem to set these props with styled-components for some reason 🙁
-            style={{ width: 80, height: 80 }}
-          />
+          <Box>
+            <Avatar
+              selected={selected}
+              src={player.avatarUrl}
+              // can't seem to set these props with styled-components for some reason 🙁
+              style={{ width: 80, height: 80 }}
+            />
+          </Box>
           <Box>
             <Box className="player-nickname-label" fontSize="h3.fontSize">
               {player.nickname}
@@ -97,9 +111,15 @@ export default ({ player }) => {
           className="player-message"
           fontFamily="Roboto"
           fontSize="body1.fontSize"
-          px={1.5}
+          // px={1.5}
+          // maxTextLine={3}
+          // whiteSpace="nowrap"
+          // overflow="hidden"
+          // textOverflow="ellipsis"
         >
-          {player.message}
+          <Truncate lines={3} ellipsis="...">
+            {player.message}
+          </Truncate>
         </Box>
       </Card>
     </ThemeProvider>

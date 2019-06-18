@@ -1,4 +1,5 @@
 import './index.css';
+import '../node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.min.css'
 
 import * as serviceWorker from './serviceWorker';
 
