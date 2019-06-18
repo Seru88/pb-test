@@ -1,10 +1,35 @@
 import { Avatar, Box } from '@material-ui/core';
+import { darken, fade } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Flag from 'react-world-flags';
 import React from 'react';
 import { useTheme } from '@material-ui/styles';
+
+const Card = styled(Box)`
+  
+  transition: ${({ theme }) =>
+    theme.transitions.create(['background-color', 'box-shadow', 'border'])};
+  border: ${({ theme, selected }) =>
+    selected
+      ? `4px solid ${theme.palette.primary.main}`
+      : `4px solid ${theme.palette.background.paper}`} 
+  &:hover {
+    background-color: ${({ theme }) =>
+      darken(theme.palette.background.paper, 0.1)};
+    border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.2)};
+    
+  }
+
+
+  &:active {
+    background-color: ${({ theme }) =>
+      darken(theme.palette.background.paper, 0.2)};
+  border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.3)};
+    
+  }
+`;
 
 export default ({ player }) => {
   const [selected, setSelected] = React.useState(false);
@@ -14,8 +39,10 @@ export default ({ player }) => {
   };
   return (
     <ThemeProvider theme={theme}>
-      <Box
+      <Card
+        // component="button"
         className="player-card"
+        selected={selected}
         width={320}
         maxHeight={200}
         m={1.25}
@@ -24,6 +51,7 @@ export default ({ player }) => {
         borderRadius={25}
         bgcolor="background.paper"
         position="relative"
+        onClick={onSelect}
       >
         <Box
           className="selection-checkmark"
@@ -49,7 +77,6 @@ export default ({ player }) => {
             src={player.avatarUrl}
             // can't seem to set these props with styled-components for some reason 🙁
             style={{ width: 80, height: 80 }}
-            onClick={onSelect}
           />
           <Box>
             <Box className="player-nickname-label" fontSize="h3.fontSize">
@@ -74,7 +101,7 @@ export default ({ player }) => {
         >
           {player.message}
         </Box>
-      </Box>
+      </Card>
     </ThemeProvider>
   );
 };
