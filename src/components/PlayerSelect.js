@@ -9,30 +9,36 @@ const intialState = [];
 
 function reducer(state, action) {
   if (action.type === 'select_player') {
-    const newState = [...state, action.payload]
+    const newState = [...state, action.payload];
     return newState;
   } else if (action.type === 'unselect_player') {
-    return state.filter(player => player.owner !== action.payload.owner)
+    return state.filter(player => player.owner !== action.payload.owner);
   }
 }
 
 export default ({ players, onSelect }) => {
   const [state, dispatch] = React.useReducer(reducer, intialState);
+  const [selectNumber, setSelectNumber] = React.useState(0);
   const theme = useTheme();
+
   const selectPlayerHandler = player => {
-    dispatch({type: 'select_player', payload: player})
-  }
+    dispatch({ type: 'select_player', payload: player });
+    setSelectNumber(selectNumber + 1);
+  };
+
   const unselectPlayerHandler = player => {
-    dispatch({type: 'unselect_player', payload: player})
-  }
+    dispatch({ type: 'unselect_player', payload: player });
+    setSelectNumber(selectNumber - 1);
+  };
+
   React.useEffect(() => {
-    if (state.length > 0) {
-      onSelect(state);
-    }
-  }, [state])
+    onSelect(state);
+  }, [state]);
+
   return (
     <ThemeProvider theme={theme}>
       <Box
+        p={2}
         display="flex"
         flexDirection="row"
         flexWrap="wrap"

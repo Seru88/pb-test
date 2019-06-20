@@ -36,11 +36,11 @@ const Card = styled(Box)`
   }
 `;
 
-export default ({ player, onSelect, onDeselect }) => {
+export default ({ player, onSelect, onDeselect, disabled }) => {
   const [selected, setSelected] = React.useState(false);
   const theme = useTheme();
   const handleClick = () => {
-    setSelected(!selected);
+    if (!disabled) setSelected(!selected);
   };
   React.useEffect(() => {
     if (selected) onSelect(player);

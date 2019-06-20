@@ -4,11 +4,12 @@ import TextTruncate from 'react-text-truncate';
 
 // import Truncate from 'react-truncate';
 
+const defaultLines = 4;
 
 export default ({ children, less, more }) => {
   // const [expanded, setExpanded] = React.useState(false);
   // const [isTruncated, setTruncated] = React.useState(false);
-  const [lines, setLines] = React.useState(3);
+  const [lines, setLines] = React.useState(defaultLines);
 
   // const handleTruncate = truncated => {
   //   if (isTruncated !== truncated) {
@@ -24,7 +25,7 @@ export default ({ children, less, more }) => {
 
   const collapseLines = event => {
     event.preventDefault();
-    setLines(3);
+    setLines(defaultLines);
   }
 
   return (

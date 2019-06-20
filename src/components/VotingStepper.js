@@ -9,6 +9,12 @@ const Label = styled(Grid)`
   padding-bottom: ${({ theme }) => `${theme.spacing(1.5)}px`};
 `;
 
+const intialState = [
+  { nickname: 'Player 1' },
+  { nickname: 'Player 2' },
+  { nickname: 'Player 3' },
+];
+
 export default ({ candidates }) => {
   const theme = useTheme();
   return (
@@ -33,17 +39,59 @@ export default ({ candidates }) => {
               mt={-1}
               color="#b4b7ba"
             >
-              *One vote per region.
+              *Can only vote for one region.
             </Box>
           </Label>
-          {/* <Grid item md={3}>
-            <Avatar src={candidates.avatarUrl} />
-          </Grid> */}
-          {candidates.map((player, i) => (
-            <Grid key={i} item md={3}>
-              <Avatar src={player.avatarUrl} />
+          {candidates.map((player, i, array) => (
+            <Grid>
+              <Box height="100%" display="flex" alignItems="center">
+                <Avatar />
+                <Typography
+                  style={{ paddingLeft: theme.spacing(1) }}
+                  variant="h6"
+                  color="textSecondary"
+                >
+                  {array.length > i ? candidates[i].nickname : 'Player 1'}
+                </Typography>
+              </Box>
             </Grid>
           ))}
+          <Grid item md={3}>
+            <Box height="100%" display="flex" alignItems="center">
+              <Avatar />
+              <Typography
+                style={{ paddingLeft: theme.spacing(1) }}
+                variant="h6"
+                color="textSecondary"
+              >
+                {candidates.length >= 1 ? candidates[0].nickname : 'Player 1'}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={3}>
+            <Box height="100%" display="flex" alignItems="center">
+              <Avatar />
+              <Typography
+                style={{ paddingLeft: theme.spacing(1) }}
+                variant="h6"
+                color="textSecondary"
+              >
+                {candidates.length >= 2 ? candidates[1].nickname : 'Player 2'}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={3}>
+            <Box height="100%" display="flex" alignItems="center">
+              <Avatar />
+              <Typography
+                style={{ paddingLeft: theme.spacing(1) }}
+                variant="h6"
+                color="textSecondary"
+              >
+                {candidates.length >= 3 ? candidates[2].nickname : 'Player 3'}
+              </Typography>
+            </Box>
+          </Grid>
         </Grid>
       </Box>
     </ThemeProvider>

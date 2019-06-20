@@ -12,7 +12,7 @@ function getTotalVoteCount(players) {
 }
 
 export default () => {
-  const [region, setRegion] = React.useState('sea');
+  const [region, setRegion] = React.useState('');
   const [selectedPlayers, setSelectedPlayers] = React.useState([])
   
   let playersToVote = playersMock.filter(player => player.teams === region);
