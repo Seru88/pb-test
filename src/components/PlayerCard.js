@@ -4,6 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import React from 'react';
+import ReadMore from '../components/ReadMore';
 import TextTruncate from 'react-text-truncate';
 import Truncate from 'react-truncate';
 import { useTheme } from '@material-ui/styles';
@@ -35,25 +36,29 @@ const Card = styled(Box)`
   }
 `;
 
-export default ({ player }) => {
+export default ({ player, onSelect, onDeselect }) => {
   const [selected, setSelected] = React.useState(false);
   const theme = useTheme();
-  const onSelect = () => {
+  const handleClick = () => {
     setSelected(!selected);
   };
+  React.useEffect(() => {
+    if (selected) onSelect(player);
+    else onDeselect(player);
+  }, [selected])
   return (
     <ThemeProvider theme={theme}>
       <Card
         className="player-card"
         selected={selected}
         width={320}
-        // minHeight={200}
+        minHeight={200}
         m={1.25}
         p={2}
         boxShadow={3}
         borderRadius={25}
         position="relative"
-        onClick={onSelect}
+        onClick={handleClick}
       >
         <Fade in={selected}>
           <Box
@@ -87,7 +92,6 @@ export default ({ player }) => {
         >
           <Box>
             <Avatar
-              selected={selected}
               src={player.avatarUrl}
               // can't seem to set these props with styled-components for some reason 🙁
               style={{ width: 80, height: 80 }}
@@ -121,12 +125,19 @@ export default ({ player }) => {
           {/* <Truncate lines={3} ellipsis="...">
             {player.message}
           </Truncate> */}
-          <TextTruncate
+          {/* <TextTruncate
             line={3}
             truncateText="…"
             text={player.message}
             textTruncateChild={<a href="#">Read on</a>}
-          />
+          /> */}
+          <ReadMore
+            lines={3}
+            more="more"
+            less="less"
+          >
+            {player.message}
+          </ReadMore>
         </Box>
       </Card>
     </ThemeProvider>

@@ -5,22 +5,46 @@ import PlayerCard from './PlayerCard';
 import React from 'react';
 import { useTheme } from '@material-ui/styles';
 
-export default ({players}) => {
-  const [selectedPlayers, setSelectedPlayers] = React.useState([]);
+const intialState = [];
+
+function reducer(state, action) {
+  if (action.type === 'select_player') {
+    const newState = [...state, action.payload]
+    return newState;
+  } else if (action.type === 'unselect_player') {
+    return state.filter(player => player.owner !== action.payload.owner)
+  }
+}
+
+export default ({ players, onSelect }) => {
+  const [state, dispatch] = React.useReducer(reducer, intialState);
   const theme = useTheme();
-  const selectPlayer = player => {
-    setSelectedPlayers(selectedPlayers => selectedPlayers.push(player))
+  const selectPlayerHandler = player => {
+    dispatch({type: 'select_player', payload: player})
+  }
+  const unselectPlayerHandler = player => {
+    dispatch({type: 'unselect_player', payload: player})
   }
   React.useEffect(() => {
-    if (selectedPlayers.length === 3) {
-    
+    if (state.length > 0) {
+      onSelect(state);
     }
-  }, [selectedPlayers])
+  }, [state])
   return (
     <ThemeProvider theme={theme}>
-      <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center" >
+      <Box
+        display="flex"
+        flexDirection="row"
+        flexWrap="wrap"
+        justifyContent="center"
+      >
         {players.map(player => (
-          <PlayerCard key={player.owner} player={player} onClick={selectPlayer}/>
+          <PlayerCard
+            key={player.owner}
+            player={player}
+            onSelect={selectPlayerHandler}
+            onDeselect={unselectPlayerHandler}
+          />
         ))}
       </Box>
     </ThemeProvider>

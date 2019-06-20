@@ -7,9 +7,7 @@ import VotingContainer from './container/VotingContainer';
 export default () => {
   return (
     <Box>
-      <Container maxWidth="lg">
-        <Header />
-      </Container>
+      <Header />
       <main>
         <VotingContainer />
       </main>

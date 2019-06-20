@@ -18,7 +18,8 @@ let theme = createMuiTheme({
       paper: '#4c5b6a'
     },
     text: {
-      primary: '#fff'
+      primary: '#fff',
+      secondary: '#000'
     }
   },
   typography: {
