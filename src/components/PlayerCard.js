@@ -4,6 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import React from 'react';
+import TextTruncate from 'react-text-truncate';
 import Truncate from 'react-truncate';
 import { useTheme } from '@material-ui/styles';
 
@@ -46,7 +47,7 @@ export default ({ player }) => {
         className="player-card"
         selected={selected}
         width={320}
-        maxHeight={200}
+        // minHeight={200}
         m={1.25}
         p={2}
         boxShadow={3}
@@ -117,9 +118,15 @@ export default ({ player }) => {
           // overflow="hidden"
           // textOverflow="ellipsis"
         >
-          <Truncate lines={3} ellipsis="...">
+          {/* <Truncate lines={3} ellipsis="...">
             {player.message}
-          </Truncate>
+          </Truncate> */}
+          <TextTruncate
+            line={3}
+            truncateText="…"
+            text={player.message}
+            textTruncateChild={<a href="#">Read on</a>}
+          />
         </Box>
       </Card>
     </ThemeProvider>
