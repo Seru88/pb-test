@@ -14,7 +14,8 @@
     "styled-components": "^4.3.1"
   },
   "devDependencies": {
-    "@types/styled-components": "^4.1.16"
+    "@types/styled-components": "^4.1.16",
+    "react-social-icons": "^4.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

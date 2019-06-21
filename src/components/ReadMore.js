@@ -1,4 +1,5 @@
-import { Box } from '@material-ui/core';
+import { Box, Collapse } from '@material-ui/core';
+
 import React from 'react';
 import TextTruncate from 'react-text-truncate';
 
@@ -20,21 +21,17 @@ export default ({ children, less, more }) => {
   const unCollapseLines = event => {
     event.preventDefault();
     setLines(0);
-    
   };
 
   const collapseLines = event => {
     event.preventDefault();
     setLines(defaultLines);
-  }
+  };
 
   return (
-    
-    <Box
-      onMouseEnter={unCollapseLines}
-      onMouseLeave={collapseLines}
-    >
-      {/* <Truncate
+    <Collapse in={lines === defaultLines ? true : false} onMouseEnter={unCollapseLines} onMouseLeave={collapseLines}>
+      <Box >
+        {/* <Truncate
         lines={!expanded && lines}
         ellipsis={
           <span>
@@ -48,13 +45,17 @@ export default ({ children, less, more }) => {
       >
         {children}
       </Truncate> */}
-      <TextTruncate
-        line={lines}
-        truncateText="…"
-        text={children}
-        textTruncateChild={<a style={{float: 'right'}} href="#">Read on</a>}
-      />
-    </Box>
+        <TextTruncate
+          line={lines}
+          truncateText="…"
+          text={children}
+          textTruncateChild={
+            <a style={{ float: 'right' }} href="#">
+              Read on
+            </a>
+          }
+        />
+      </Box>
+    </Collapse>
   );
 };
-

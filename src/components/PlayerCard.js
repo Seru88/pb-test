@@ -5,14 +5,18 @@ import styled, { ThemeProvider } from 'styled-components';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import React from 'react';
 import ReadMore from '../components/ReadMore';
-import TextTruncate from 'react-text-truncate';
-import Truncate from 'react-truncate';
 import { useTheme } from '@material-ui/styles';
 
 // only define custom behaviour
 const Card = styled(Box)`
   transition: ${({ theme }) =>
-    theme.transitions.create(['background-color', 'box-shadow', 'border'])};
+    theme.transitions.create([
+      'background-color',
+      'box-shadow',
+      'border',
+      'opacity',
+    ])};
+  opacity: ${({ opacity }) => opacity}
   background-color: ${({ theme, selected }) =>
     selected
       ? darken(theme.palette.background.paper, 0.2)
@@ -32,33 +36,37 @@ const Card = styled(Box)`
   &:active {
     background-color: ${({ theme }) =>
       darken(theme.palette.background.paper, 0.2)};
-    border-color: ${({ theme }) => darken(theme.palette.primary.main, 0.3)};
+    border-color: ${({ theme, selected }) =>
+      selected
+        ? darken(theme.palette.primary.main, 0.3)
+        : darken(theme.palette.background.paper, 0.2)};
   }
 `;
 
-export default ({ player, onSelect, onDeselect, disabled }) => {
+export default ({ player, onSelect, onDeselect }) => {
   const [selected, setSelected] = React.useState(false);
   const theme = useTheme();
   const handleClick = () => {
-    if (!disabled) setSelected(!selected);
+    if (!player.disabled) setSelected(!selected);
   };
   React.useEffect(() => {
     if (selected) onSelect(player);
     else onDeselect(player);
-  }, [selected])
+  }, [selected]);
   return (
     <ThemeProvider theme={theme}>
       <Card
         className="player-card"
-        selected={selected}
+        selected={player.disabled ? false : selected}
         width={320}
         minHeight={200}
         m={1.25}
         p={2}
         boxShadow={3}
         borderRadius={25}
+        opacity={player.disabled ? 0.5 : 1.0}
         position="relative"
-        onClick={handleClick}
+        onClick={player.disabled ? null : handleClick}
       >
         <Fade in={selected}>
           <Box
@@ -116,26 +124,8 @@ export default ({ player, onSelect, onDeselect, disabled }) => {
           className="player-message"
           fontFamily="Roboto"
           fontSize="body1.fontSize"
-          // px={1.5}
-          // maxTextLine={3}
-          // whiteSpace="nowrap"
-          // overflow="hidden"
-          // textOverflow="ellipsis"
         >
-          {/* <Truncate lines={3} ellipsis="...">
-            {player.message}
-          </Truncate> */}
-          {/* <TextTruncate
-            line={3}
-            truncateText="…"
-            text={player.message}
-            textTruncateChild={<a href="#">Read on</a>}
-          /> */}
-          <ReadMore
-            lines={3}
-            more="more"
-            less="less"
-          >
+          <ReadMore lines={3} more="more" less="less">
             {player.message}
           </ReadMore>
         </Box>

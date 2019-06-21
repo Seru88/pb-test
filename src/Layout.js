@@ -1,5 +1,4 @@
-import { Box, Button, Container, Grid } from '@material-ui/core';
-
+import { Box } from '@material-ui/core';
 import Header from './components/Header';
 import React from 'react';
 import VotingContainer from './container/VotingContainer';
