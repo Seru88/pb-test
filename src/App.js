@@ -46,7 +46,6 @@ function App() {
   );
 
   const [open, setOpen] = React.useState(false);
-  console.log(sessionOpen);
   const handleSetUser = user => {
     setUser(user);
     setOpen(false);
