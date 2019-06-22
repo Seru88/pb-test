@@ -1,4 +1,10 @@
-import { Avatar, Box, Grid, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Grid,
+  Typography,
+  useMediaQuery,
+} from '@material-ui/core';
 import styled, { ThemeProvider } from 'styled-components';
 
 import React from 'react';
@@ -19,25 +25,36 @@ const StyledAvatar = styled(Avatar)`
 export default ({ players, onSubmit }) => {
   const theme = useTheme();
 
+  const queryMatch = useMediaQuery(theme.breakpoints.down('sm'));
+
   const selections = [];
   for (let i = 0; i < 3; i++) {
     const avatar = (
-      <Grid key={i} item xs={3} md={2}>
-        <Box height="100%" display="flex" alignItems="center">
+      <Grid key={i} item xs={3} sm={2} md={2}>
+        <Box
+          height="100%"
+          display="flex"
+          alignItems="center"
+          pt={queryMatch ? 0 : 1.5}
+          pb={queryMatch ? 1 : 2.5}
+          justifyContent="center"
+        >
           <StyledAvatar
-            style={{ width: 50, height: 50 }}
+            style={queryMatch ? null : { width: 50, height: 50 }}
             src={players[i] ? players[i].avatarUrl : ''}
             chosen={players.length > i ? 1 : 0}
           >
-            ???
+            {queryMatch ? `P ${i + 1}` : `???`}
           </StyledAvatar>
-          <Typography
-            style={{ paddingLeft: theme.spacing(1) }}
-            variant="h6"
-            color="textSecondary"
-          >
-            {players.length > i ? players[i].nickname : `Player ${i+1}`}
-          </Typography>
+          {queryMatch ? null : (
+            <Typography
+              style={{ paddingLeft: theme.spacing(1) }}
+              variant="h6"
+              color="textSecondary"
+            >
+              {players.length > i ? players[i].nickname : `Player ${i + 1}`}
+            </Typography>
+          )}
         </Box>
       </Grid>
     );
@@ -47,7 +64,7 @@ export default ({ players, onSubmit }) => {
   return (
     <ThemeProvider theme={theme}>
       <Box
-        height={{ sm: 180, md: 73 }}
+        height={{ xs: 120, sm: 130, md: 73 }}
         width="100%"
         position="sticky"
         bottom={0}
@@ -68,19 +85,22 @@ export default ({ players, onSubmit }) => {
             </Typography>
           </Label>
           {selections}
-          <Grid item xs={12} md={2}>
+          <Grid item xs={3} md={2}>
             <Box
               height="100%"
               display="flex"
               alignItems="center"
-              p={2}
+              pt={1.5}
+              pb={2.5}
               justifyContent="center"
+              // bgcolor="cyan"
             >
               <StyledButton
                 selected={players.length === 3}
                 onClick={onSubmit}
-                width={175}
+                width={queryMatch ? 80 : 175}
                 height={34}
+
               >
                 SUBMIT
               </StyledButton>
