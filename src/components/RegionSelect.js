@@ -48,15 +48,19 @@ function getButtonLabel(regionCode) {
   if (regionCode === 'hk') return 'Hong Kong'.toUpperCase();
 }
 
-export default ({ onSelect, onVotingClose, players }) => {
+export default ({ onSelect, players }) => {
   const [state, dispatch] = React.useReducer(reducer, initalState);
   const theme = useTheme();
 
-  const {user} = React.useContext(MyContext);
+  const { user, sessionOpen, setSessionOpen } = React.useContext(MyContext);
 
   const onRegionSelect = region => () => {
     onSelect(region);
     dispatch({ type: region });
+  };
+
+  const handleSessionToggle = toggle => () => {
+    setSessionOpen(toggle);
   };
 
   const regions = Object.keys(initalState);
@@ -84,15 +88,17 @@ export default ({ onSelect, onVotingClose, players }) => {
             </Grid>
           ))}
           {user === 'admin' ? (
-            <Box margin="0 auto" mt={2} width={250} height={34}>
-              <StyledButton
-                width="100%"
-                height="100%"
-                onClick={onVotingClose}
-              >
-                CLOSE VOTING SESSION
-              </StyledButton>
-            </Box>
+            <Grid item xs={12}>
+              <Box margin="0 auto" mt={2} width={175} height={34}>
+                <StyledButton
+                  width="100%"
+                  height="100%"
+                  onClick={handleSessionToggle(!sessionOpen)}
+                >
+                  {sessionOpen ? `DISABLE VOTING` : `ENABLE VOTING`}
+                </StyledButton>
+              </Box>
+            </Grid>
           ) : null}
         </Container>
       </ThemeProvider>

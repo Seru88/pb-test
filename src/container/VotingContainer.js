@@ -80,7 +80,7 @@ function reducer(state, action) {
   }
 }
 
-export default ({ user, onVoteSessionClose }) => {
+export default ({ user }) => {
   const [selectedPlayers, setSelectedPlayers] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, null);
@@ -123,10 +123,6 @@ export default ({ user, onVoteSessionClose }) => {
     }
   };
 
-  const handleCloseVoteSession = () => {
-    onVoteSessionClose(false);
-  };
-
   const reset = () => {
     setOpen(false);
     dispatch({ type: 'reset_state' });
@@ -149,7 +145,7 @@ export default ({ user, onVoteSessionClose }) => {
         <RegionSelect
           onSelect={selectRegion}
           players={state}
-          onVotingClose={handleCloseVoteSession}
+          // onVoteSessionToggle={handleSessionToggle}
         />
         {state && (
           <>

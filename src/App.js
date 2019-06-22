@@ -59,6 +59,7 @@ function App() {
         value={{
           user: user === '' ? 'guest' : user,
           sessionOpen: sessionOpen === '' ? true : JSON.parse(sessionOpen),
+          setSessionOpen: setSessionOpen,
         }}
       >
         <UserSelectDialog
@@ -67,7 +68,7 @@ function App() {
           onClose={setOpen}
         />
         <Box>
-          <Header live={sessionOpen} />
+          <Header live={sessionOpen === '' ? true : JSON.parse(sessionOpen)} />
           <main>
             <Username onClick={setOpen} />
             <VotingContainer user={user} onVoteSessionClose={setSessionOpen} />

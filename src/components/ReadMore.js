@@ -1,60 +1,36 @@
-import { Box, Collapse } from '@material-ui/core';
+import { Box, Collapse, Typography } from '@material-ui/core';
 
 import React from 'react';
-import TextTruncate from 'react-text-truncate';
-
-// import Truncate from 'react-truncate';
+import Truncate from 'react-truncate';
 
 const defaultLines = 4;
 
 export default ({ children, less, more }) => {
-  // const [expanded, setExpanded] = React.useState(false);
-  // const [isTruncated, setTruncated] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
   const [lines, setLines] = React.useState(defaultLines);
 
-  // const handleTruncate = truncated => {
-  //   if (isTruncated !== truncated) {
-  //     setTruncated(truncated);
-  //   }
-  // };
-
-  const unCollapseLines = event => {
-    event.preventDefault();
-    setLines(0);
-  };
-
-  const collapseLines = event => {
-    event.preventDefault();
-    setLines(defaultLines);
-  };
+  React.useEffect(() => {
+    if (expanded) setLines(0);
+    else setLines(4);
+  }, [expanded]);
 
   return (
-    <Collapse in={lines === defaultLines ? true : false} onMouseEnter={unCollapseLines} onMouseLeave={collapseLines}>
-      <Box >
-        {/* <Truncate
-        lines={!expanded && lines}
-        ellipsis={
-          <span>
-            ...{' '}
-            <a href="#" onClick={toggleLines}>
-              {more}
-            </a>
-          </span>
-        }
-        onTruncate={handleTruncate}
-      >
-        {children}
-      </Truncate> */}
-        <TextTruncate
-          line={lines}
-          truncateText="…"
-          text={children}
-          textTruncateChild={
-            <a style={{ float: 'right' }} href="#">
-              Read on
-            </a>
-          }
-        />
+    <Collapse
+      in={expanded}
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
+      collapsedHeight="75px"
+    >
+      <Box>
+        <Typography
+          component={Truncate}
+          lines={lines}
+          ellipsis="..."
+          variant="body2"
+          style={{ fontFamily: 'Roboto' }}
+        >
+          {children}
+        </Typography>
       </Box>
     </Collapse>
   );
