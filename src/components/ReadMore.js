@@ -1,6 +1,5 @@
-import { Box, Collapse, IconButton, Typography } from '@material-ui/core';
+import { Box, Collapse } from '@material-ui/core';
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import TextTruncate from 'react-text-truncate';
 
@@ -27,11 +26,6 @@ export default ({ children, less, more }) => {
           line={lines}
           truncateText="…"
           text={children}
-          // textTruncateChild={
-          //   <a style={{ float: 'right' }} href="#">
-          //     Read on
-          //   </a>
-          // }
         />
       </Box>
     </Collapse>
