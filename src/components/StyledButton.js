@@ -23,6 +23,7 @@ const StyledButton = styled.button`
     background-color: ${({ theme }) => theme.palette.primary.main};
     border-color: ${({ theme }) => theme.palette.primary.main};
     color: white;
+    cursor: pointer;
 `;
 
 export default ({ children, selected, onClick, width, height }) => {

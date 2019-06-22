@@ -6,7 +6,7 @@ import { SocialIcon } from 'react-social-icons';
 import StyledButton from './StyledButton';
 import styled from 'styled-components';
 
-const PaperComponent = styled(Box)`
+const DialogBase = styled(Box)`
   background-color: white;
   border-radius: 25px;
   width: 600px;
@@ -29,7 +29,7 @@ export default ({ open, onClose }) => {
     <Dialog
       open={open}
       TransitionComponent={Transition}
-      PaperComponent={PaperComponent}
+      PaperComponent={DialogBase}
       keepMounted
       onClose={onClose}
       aria-labelledby="alert-dialog-slide-title"
@@ -83,12 +83,18 @@ export default ({ open, onClose }) => {
         >
           {social.map((site, i) => (
             <Box key={i} my={2}>
-              <SocialIcon url={site} style={{ width: 75, height: 75 }} />
+              <SocialIcon
+                url={site}
+                target="_blank"
+                style={{ width: 75, height: 75 }}
+              />
             </Box>
           ))}
         </Box>
-        <Box margin="0 auto" width={175} >
-          <StyledButton width="100%" onClick={onClose}>CLOSE</StyledButton>
+        <Box margin="0 auto" width={175}>
+          <StyledButton width="100%" height={34} onClick={onClose}>
+            CLOSE
+          </StyledButton>
         </Box>
       </Box>
     </Dialog>

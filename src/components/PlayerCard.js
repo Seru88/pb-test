@@ -1,10 +1,10 @@
 import { Avatar, Box, Fade } from '@material-ui/core';
-import { darken, fade } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import React from 'react';
 import ReadMore from '../components/ReadMore';
+import { darken } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/styles';
 
 // only define custom behaviour
@@ -43,11 +43,11 @@ const Card = styled(Box)`
   }
 `;
 
-export default ({ player, onSelect, onDeselect }) => {
+export default ({ player, selectable, onSelect, onDeselect }) => {
   const [selected, setSelected] = React.useState(false);
   const theme = useTheme();
   const handleClick = () => {
-    if (!player.disabled) setSelected(!selected);
+    if (!player.disabled && selectable) setSelected(!selected);
   };
   React.useEffect(() => {
     if (selected) onSelect(player);
@@ -57,7 +57,7 @@ export default ({ player, onSelect, onDeselect }) => {
     <ThemeProvider theme={theme}>
       <Card
         className="player-card"
-        selected={player.disabled ? false : selected}
+        selected={player.disabled || !selectable ? false : selected}
         width={320}
         minHeight={200}
         m={1.25}
@@ -116,7 +116,8 @@ export default ({ player, onSelect, onDeselect }) => {
               textAlign="right"
               mt={-0.5}
             >
-              {player.likeCount}
+
+              {`${player.likeRatio.toFixed(2)}%`}
             </Box>
           </Box>
         </Box>

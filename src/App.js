@@ -1,31 +1,39 @@
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
+import { Box } from '@material-ui/core';
 import { CssBaseline } from '@material-ui/core';
-import Layout from './Layout';
+import Header from './components/Header';
 import React from 'react';
+import StyledButton from './components/StyledButton';
 import { ThemeProvider } from '@material-ui/styles';
+import UserSelectDialog from './components/UserSelectDialog';
+import Username from './components/Username';
+import VotingContainer from './container/VotingContainer';
+import useStateWithSessionStorage from './hooks/useStateWithLocalStorage';
+
+export const MyContext = React.createContext();
 
 let theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#ff7d08'
+      main: '#ff7d08',
     },
     secondary: {
       main: '#4c5b6a',
     },
     background: {
       default: '#242e37',
-      paper: '#4c5b6a'
+      paper: '#4c5b6a',
     },
     text: {
       primary: '#fff',
-      secondary: '#000'
-    }
+      secondary: '#000',
+    },
   },
   typography: {
-    // Tell Material-UI what's the font-size on the html element is.
+    // Tell Material-UI what's the font-size on the html element.
     htmlFontSize: 10,
-    fontFamily: '"Catamaran", "Roboto", "Helvetica", "Arial", sans-serif'
+    fontFamily: '"Catamaran", "Roboto", "Helvetica", "Arial", sans-serif',
   },
 });
 
@@ -33,10 +41,40 @@ let theme = createMuiTheme({
 theme = responsiveFontSizes(theme);
 
 function App() {
+  const [user, setUser] = useStateWithSessionStorage('user');
+  const [sessionOpen, setSessionOpen] = useStateWithSessionStorage(
+    'sessionOpen'
+  );
+
+  const [open, setOpen] = React.useState(false);
+  console.log(sessionOpen);
+  const handleSetUser = user => {
+    setUser(user);
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout />
+      <MyContext.Provider
+        value={{
+          user: user === '' ? 'guest' : user,
+          sessionOpen: sessionOpen === '' ? true : JSON.parse(sessionOpen),
+        }}
+      >
+        <UserSelectDialog
+          open={open}
+          onSelect={handleSetUser}
+          onClose={setOpen}
+        />
+        <Box>
+          <Header live={sessionOpen} />
+          <main>
+            <Username onClick={setOpen} />
+            <VotingContainer user={user} onVoteSessionClose={setSessionOpen} />
+          </main>
+        </Box>
+      </MyContext.Provider>
     </ThemeProvider>
   );
 }

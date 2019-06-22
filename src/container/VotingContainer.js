@@ -1,5 +1,5 @@
-import { Box, Grid, Typography } from '@material-ui/core';
-
+import { Box } from '@material-ui/core';
+import { MyContext } from '../App';
 import PlayerCard from '../components/PlayerCard';
 import React from 'react';
 import RegionSelect from '../components/RegionSelect';
@@ -7,14 +7,25 @@ import VoteRecordedDialog from '../components/VoteRecordedDialog';
 import VotingStepper from '../components/VotingStepper';
 import { playersMock } from '../model/players_teams';
 
+let initialState = JSON.parse(sessionStorage.getItem('players')) || playersMock;
+
 function getTotalVoteCount(players) {
   return players.map(player => player.likeCount).reduce((a, b) => a + b, 0);
+}
+
+function setLikeRatio(players, totalVote) {
+  return players.map(player => {
+    return {
+      ...player,
+      likeRatio: parseFloat((player.likeCount / totalVote) * 100),
+    };
+  });
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case 'select_region':
-      let newState = playersMock.filter(
+      let newState = initialState.filter(
         mockPlayer => mockPlayer.teams === action.payload
       );
       // Create State Properties
@@ -23,7 +34,7 @@ function reducer(state, action) {
         ...player,
         selected: false,
         disabled: false,
-        likeCount: `${((player.likeCount / totalVote) * 100).toFixed(2)}%`,
+        likeRatio: parseFloat((player.likeCount / totalVote) * 100),
       }));
       return newState;
     case 'select_player':
@@ -54,17 +65,35 @@ function reducer(state, action) {
         mockPlayer.disabled = false;
         return mockPlayer;
       });
-    case 'reset_state': 
+    case 'record_vote':
+      const updatedState = state.map(player => {
+        for (let i = 0; i < action.payload.length; i++) {
+          if (player.participantId === action.payload[i].participantId) {
+            player.likeCount = player.likeCount + 1;
+          }
+        }
+        return player;
+      });
+
+      initialState = initialState.filter(
+        player => player.teams !== updatedState[0].teams
+      );
+      initialState = [...updatedState, ...initialState];
+      // store to "DB"
+      sessionStorage.setItem('players', JSON.stringify(initialState));
+      return updatedState;
+    case 'reset_state':
       return null;
     default:
       return state;
   }
 }
 
-export default () => {
+export default ({ user, onVoteSessionClose }) => {
   const [selectedPlayers, setSelectedPlayers] = React.useState([]);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, null);
+  const {sessionOpen} = React.useContext(MyContext);
 
   const selectRegion = region => {
     dispatch({ type: 'select_region', payload: region });
@@ -72,11 +101,13 @@ export default () => {
   };
 
   const selectPlayer = player => {
+    if (user === "guest" || user === "") return;
     dispatch({ type: 'select_player', payload: player.participantId });
     setSelectedPlayers([...selectedPlayers, player]);
   };
 
   const deSelectPlayer = player => {
+    if (user === "guest" || user === "") return;
     dispatch({ type: 'deselect_player', payload: player.participantId });
     setSelectedPlayers(
       selectedPlayers.filter(
@@ -94,8 +125,20 @@ export default () => {
   };
 
   const handleVoteComplete = () => {
+    // make sure we can only submit vote if use has selected 3 players
+    if (selectedPlayers.length === 3) {
+      setOpen(true);
+      dispatch({ type: 'record_vote', payload: selectedPlayers });
+    }
+  };
+
+  const handleCloseVoteSession = () => {
+    onVoteSessionClose(false);
+  };
+
+  const reset = () => {
     setOpen(false);
-    dispatch({type: 'reset_state'})
+    dispatch({ type: 'reset_state' });
   };
 
   React.useEffect(() => {
@@ -106,17 +149,17 @@ export default () => {
     }
   }, [selectedPlayers]);
 
+  if (sessionOpen === false && state !== null) state.sort((a,b) => b.likeCount - a.likeCount )
+
   return (
     <>
-      <VoteRecordedDialog open={open} onClose={handleVoteComplete} />
+      <VoteRecordedDialog open={open} onClose={reset} />
       <Box className="voting-container" width="100%">
-        {/* <Typography variant="subtitle2" align="center" color="textPrimary">
-        Select your region to browse players.
-      </Typography> */}
-        {/* <Typography variant="subtitle2" align="center" color="textPrimary">
-        NOTE. You may only vote for one region.
-      </Typography> */}
-        <RegionSelect onSelect={selectRegion} />
+        <RegionSelect
+          onSelect={selectRegion}
+          players={state}
+          onVotingClose={handleCloseVoteSession}
+        />
         {state && (
           <>
             <Box
@@ -133,13 +176,16 @@ export default () => {
                   player={player}
                   onSelect={selectPlayer}
                   onDeselect={deSelectPlayer}
+                  selectable={user !== 'guest' && user !== '' && sessionOpen}
                 />
-              ))}
+              )).sort((a, b) => b.likeCount - a.likeCount)}
             </Box>
-            <VotingStepper
-              players={selectedPlayers}
-              onSubmit={handleVoteComplete}
-            />
+            {user !== 'guest' && user !== '' && sessionOpen ? (
+              <VotingStepper
+                players={selectedPlayers}
+                onSubmit={handleVoteComplete}
+              />
+            ) : null}
           </>
         )}
       </Box>

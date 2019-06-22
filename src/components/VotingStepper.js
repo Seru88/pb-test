@@ -23,15 +23,15 @@ export default ({ players, onSubmit }) => {
   return (
     <ThemeProvider theme={theme}>
       <Box
-        height={73}
+        height={{ sm: 180,  md:73}}
         width="100%"
         position="sticky"
         bottom={0}
         bgcolor="white"
         zIndex={15}
       >
-        <Grid container justify="center">
-          <Label item md={3}>
+        <Grid container justify="center" alignContent="space-between">
+          <Label item xs={12} md={3}>
             <Box fontSize="2.2rem" textAlign="center" color="text.secondary">
               Casting a vote for:
             </Box>
@@ -44,10 +44,10 @@ export default ({ players, onSubmit }) => {
               *CANNOT vote accross regions.
             </Box>
           </Label>
-          <Grid item md={2}>
+          <Grid item xs={3} md={2}>
             <Box height="100%" display="flex" alignItems="center">
               <StyledAvatar
-                style={{ width: 55, height: 55 }}
+                style={{ width: 50, height: 50 }}
                 src={players[0] ? players[0].avatarUrl : ''}
                 chosen={players.length >= 1 ? 1 : 0}
               >
@@ -62,10 +62,10 @@ export default ({ players, onSubmit }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={3} md={2}>
             <Box height="100%" display="flex" alignItems="center">
               <StyledAvatar
-                style={{ width: 55, height: 55 }}
+                style={{ width: 50, height: 50 }}
                 src={players[1] ? players[1].avatarUrl : ''}
                 chosen={players.length >= 2 ? 1 : 0}
               >
@@ -80,10 +80,10 @@ export default ({ players, onSubmit }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={3} md={2}>
             <Box height="100%" display="flex" alignItems="center">
               <StyledAvatar
-                style={{ width: 55, height: 55 }}
+                style={{ width: 50, height: 50 }}
                 src={players[2] ? players[2].avatarUrl : ''}
                 chosen={players.length >= 3 ? 1 : 0}
               >
@@ -98,11 +98,13 @@ export default ({ players, onSubmit }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item md={2}>
-            <Box height="100%" display="flex" alignItems="center">
+          <Grid item xs={12} md={2}>
+            <Box height="100%" display="flex" alignItems="center" p={2} justifyContent="center">
               <StyledButton
                 selected={players.length === 3}
                 onClick={onSubmit}
+                width={175}
+                height={34}
               >
                 SUBMIT
               </StyledButton>
