@@ -13,15 +13,6 @@ function getTotalVoteCount(players) {
   return players.map(player => player.likeCount).reduce((a, b) => a + b, 0);
 }
 
-function setLikeRatio(players, totalVote) {
-  return players.map(player => {
-    return {
-      ...player,
-      likeRatio: parseFloat((player.likeCount / totalVote) * 100),
-    };
-  });
-}
-
 function reducer(state, action) {
   switch (action.type) {
     case 'select_region':

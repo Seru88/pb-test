@@ -4,7 +4,6 @@ import { Box } from '@material-ui/core';
 import { CssBaseline } from '@material-ui/core';
 import Header from './components/Header';
 import React from 'react';
-import StyledButton from './components/StyledButton';
 import { ThemeProvider } from '@material-ui/styles';
 import UserSelectDialog from './components/UserSelectDialog';
 import Username from './components/Username';

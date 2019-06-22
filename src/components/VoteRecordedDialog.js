@@ -1,16 +1,22 @@
 import { Box, Dialog, Typography } from '@material-ui/core';
+import styled, { ThemeProvider } from 'styled-components';
 
 import React from 'react';
 import Slide from '@material-ui/core/Slide';
 import { SocialIcon } from 'react-social-icons';
 import StyledButton from './StyledButton';
-import styled from 'styled-components';
+import { useTheme } from '@material-ui/styles';
 
 const DialogBase = styled(Box)`
   background-color: white;
   border-radius: 25px;
   width: 600px;
   height: 400px;
+
+  ${({ theme }) => `${theme.breakpoints.down('sm')}`} {
+    width: 450px;
+    height: 375px;
+  }
 `;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -25,7 +31,9 @@ const social = [
 ];
 
 export default ({ open, onClose }) => {
+  const theme = useTheme();
   return (
+    <ThemeProvider theme={theme}>
     <Dialog
       open={open}
       TransitionComponent={Transition}
@@ -44,36 +52,36 @@ export default ({ open, onClose }) => {
         >
           VOTES RECORDED!
         </Typography>
-        <Box
-          textAlign="center"
-          fontSize="1.8rem"
-          color="text.secondary"
-          fontFamily="Roboto"
+        <Typography
+          align="center"
+          color="textSecondary"
+          variant="body1"
+          style={{ fontFamily: 'Roboto' }}
+          gutterBottom
         >
           Thank you for participating{' '}
           <strong>
             <u>Username</u>
           </strong>
-        </Box>
-        <Box
-          textAlign="center"
-          fontSize="1.8rem"
-          color="text.secondary"
-          fontFamily="Roboto"
-          mt={1}
+        </Typography>
+        <Typography
+          align="center"
+          color="textSecondary"
+          variant="body1"
+          style={{ fontFamily: 'Roboto' }}
+          gutterBottom
         >
           Help your teams get the upper hand and tell your friends to vote for
           them too!
-        </Box>
-        <Box
-          textAlign="center"
-          fontSize="1.8rem"
-          color="text.secondary"
-          fontFamily="Roboto"
-          mt={1}
+        </Typography>
+        <Typography
+          align="center"
+          color="textSecondary"
+          variant="body1"
+          style={{ fontFamily: 'Roboto' }}
         >
           <strong>*Voting closes August 14th, 2019 at 12:00AM.</strong>
-        </Box>
+        </Typography>
         <Box
           margin="0 auto"
           display="flex"
@@ -98,5 +106,6 @@ export default ({ open, onClose }) => {
         </Box>
       </Box>
     </Dialog>
+    </ThemeProvider>
   );
 };
